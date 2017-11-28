@@ -45,29 +45,64 @@ public class GaussianEliminationSquareMatrices {
 
   // Computes the augmented matrix [A|b], as defined in Section 5.4 of Math notes
   protected double[][] augmentedMatrix(final double[][] A, final double[] b) {
-
-    return null;
+    double [][] augMat = new double[A.length][A.length + 1];
+    for (int i = 0; i < A.length; i++) {
+      for (int j = 0; j < A.length + 1; j++) {
+        if (j != A.length) {
+          augMat[i][j] = A[i][j];
+        } else {
+          augMat[i][j] = b[i];
+        }
+      }
+    }
+    return augMat;
   }
 
   protected int findNextRowWithLargestElementInCol(double[][] augmentedMatrix, int pivot) {
-
-    return -1;
+    int LargestElementIndex = pivot;
+    for (int i = pivot + 1; i < augmentedMatrix.length; i++) {
+      if (augmentedMatrix[LargestElementIndex][pivot] < augmentedMatrix[i][pivot]) {
+      LargestElementIndex = i;
+      }
+    }
+    return LargestElementIndex;
   }
 
   protected double[][] reducedRowEchelonForm(double[][] augmentedMatrix) {
     assert augmentedMatrix != null : "The augmented matrix should not be null";
-    assert augmentedMatrix.length > 0 : "The augmented matrix should not be empty";
-    assert augmentedMatrix[0].length == augmentedMatrix.length + 1 : "The number of columns in the augmented matrix should be the number of rows + 1";
+    assert
+        augmentedMatrix.length > 0 : "The augmented matrix should not be empty";
+    assert augmentedMatrix[0].length == augmentedMatrix.length
+        + 1 : "The number of columns in the augmented matrix should be the number of rows + 1";
 
-    return null;
+    for (int pivot = 0; pivot < augmentedMatrix.length; pivot++) {
+      int rowIndexMaxElementInColPivot = findNextRowWithLargestElementInCol
+          (augmentedMatrix, pivot);
+      swapRows(augmentedMatrix, rowIndexMaxElementInColPivot, pivot);
+      if (isAlmostZero(augmentedMatrix[pivot][pivot])) {
+        //the system has no solutions (given the accuracy of almostZero)
+        return null;
+      }
+      reduceRow(augmentedMatrix, pivot);
+    }
+    return augmentedMatrix;
   }
 
   protected void reduceRow(double[][] augmentedMatrix, int pivot) {
     assert augmentedMatrix != null : "The augmented matrix should not be null";
     assert augmentedMatrix.length > 0 : "The augmented matrix should not be empty";
     assert augmentedMatrix[0].length == augmentedMatrix.length + 1 : "The number of columns in the augmented matrix should be the number of rows + 1";
-    assert pivot>0 && pivot<augmentedMatrix[0].length : "The pivot element should be between 0 and the number of columns of the augmented matrix";
+    assert pivot>=0 && pivot<augmentedMatrix[0].length : "The pivot element "
+        + "should be between 0 and the number of columns of the augmented matrix";
 
+    for (int row = pivot + 1; row < augmentedMatrix.length; row++) {
+      double coefficient = augmentedMatrix[row][pivot] /
+          augmentedMatrix[pivot][pivot];
+
+      for (int col = pivot; col < augmentedMatrix.length + 1; col++) {
+        augmentedMatrix[row][col] -= coefficient * augmentedMatrix[pivot][col];
+      }
+    }
   }
 
   protected double[] backSubstitution(double[][] augmentedSquareMatrix) {

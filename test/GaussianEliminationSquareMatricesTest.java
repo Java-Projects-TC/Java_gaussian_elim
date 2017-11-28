@@ -120,36 +120,26 @@ public class GaussianEliminationSquareMatricesTest {
    */
   @Test
   public void testReducedRowEchelon() {
-    final double[][] A = new double[][]{
-        {1.0, 2.0, 3.0},
-        {2.0, 5.0, 3.0},
-        {4.000001, 9.0, 9.0}
+    final double[][] expectedRowEchelonForm = {
+        {4.0, 9.0, 10.0, 4.0},
+        {0, 0.5, -2, -1},
+        {0, 0, -0.5, -1.5},
     };
 
-    final double[] b = new double[]{0.0, 1.0, 4.0};
-
-    final double[][] expectedAugmentedMatrix = {
+    final double[][] augmentedMatrix = {
         {1.0, 2.0, 3.0, 0.0},
         {2.0, 5.0, 3.0, 1.0},
-        {4.000001, 9.0, 9.0, 4.0}
+        {4.0, 9.0, 10.0, 4.0}
     };
-    // Augmented Matrix variables
-    final int rows = expectedAugmentedMatrix.length;
 
-    double[][] result = new GaussianEliminationSquareMatrices()
-        .reducedRowEchelonForm(expectedAugmentedMatrix);
+    final double[][] result = new GaussianEliminationSquareMatrices(ALMOST_ZERO_FOR_TESTS).reducedRowEchelonForm(augmentedMatrix);
 
-    // Last Matrix row should have a single variable
-    assertEquals(0, expectedAugmentedMatrix[rows - 1][0], ALMOST_ZERO_FOR_TESTS);
-    assertEquals(0,expectedAugmentedMatrix[rows - 1][1], ALMOST_ZERO_FOR_TESTS);
+    assertEquals(expectedRowEchelonForm.length, result.length);
 
-    // One before last should have 2 etc.
-    assertEquals(0, expectedAugmentedMatrix[rows - 2][0],ALMOST_ZERO_FOR_TESTS);
-
-    // First row - all variables
-    assertNotEquals(0, expectedAugmentedMatrix[0][0]);
+    for(int row=0; row<expectedRowEchelonForm.length; row++){
+      assertArrayEquals(expectedRowEchelonForm[row],result[row], ALMOST_ZERO_FOR_TESTS);
+    }
   }
-
 
   /**
    * test solve
