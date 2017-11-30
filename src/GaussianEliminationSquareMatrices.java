@@ -25,15 +25,19 @@ public class GaussianEliminationSquareMatrices {
 
   public double[] solve(double[][] A, double[] b) {
     //Preconditions: A and b contain n x n and n elements, respectively; n>0
-    assert (A != null && b != null) : "The coefficients matrix and known terms of the system of equations should not be null";
+    assert (A != null && b
+        != null) : "The coefficients matrix and known terms of the system of equations should not be null";
     assert (A.length > 0) : "The coefficients matrix should not be empty";
-    assert (A.length == A[0].length) : "The coefficients matrix should be square";
-    assert (A.length == b.length) : "The coefficients matrix and known terms vector should have compatible sizes";
+    assert (A.length
+        == A[0].length) : "The coefficients matrix should be square";
+    assert (A.length
+        == b.length) : "The coefficients matrix and known terms vector should have compatible sizes";
 
     double[][] augmentedMatrix = augmentedMatrix(A, b);
     double[][] rowEchelonForm = reducedRowEchelonForm(augmentedMatrix);
 
-    if (rowEchelonForm != null) { // In Java 8 you can do better than checking if something is null,
+    if (rowEchelonForm
+        != null) { // In Java 8 you can do better than checking if something is null,
       // but you will see this in the second part of the course
       double[] result = backSubstitution(rowEchelonForm);
       return result;
@@ -45,7 +49,7 @@ public class GaussianEliminationSquareMatrices {
 
   // Computes the augmented matrix [A|b], as defined in Section 5.4 of Math notes
   protected double[][] augmentedMatrix(final double[][] A, final double[] b) {
-    double [][] augMat = new double[A.length][A.length + 1];
+    double[][] augMat = new double[A.length][A.length + 1];
     for (int i = 0; i < A.length; i++) {
       for (int j = 0; j < A.length + 1; j++) {
         if (j != A.length) {
@@ -58,11 +62,13 @@ public class GaussianEliminationSquareMatrices {
     return augMat;
   }
 
-  protected int findNextRowWithLargestElementInCol(double[][] augmentedMatrix, int pivot) {
+  protected int findNextRowWithLargestElementInCol(double[][] augmentedMatrix,
+      int pivot) {
     int LargestElementIndex = pivot;
     for (int i = pivot + 1; i < augmentedMatrix.length; i++) {
-      if (augmentedMatrix[LargestElementIndex][pivot] < augmentedMatrix[i][pivot]) {
-      LargestElementIndex = i;
+      if (augmentedMatrix[LargestElementIndex][pivot]
+          < augmentedMatrix[i][pivot]) {
+        LargestElementIndex = i;
       }
     }
     return LargestElementIndex;
@@ -90,9 +96,12 @@ public class GaussianEliminationSquareMatrices {
 
   protected void reduceRow(double[][] augmentedMatrix, int pivot) {
     assert augmentedMatrix != null : "The augmented matrix should not be null";
-    assert augmentedMatrix.length > 0 : "The augmented matrix should not be empty";
-    assert augmentedMatrix[0].length == augmentedMatrix.length + 1 : "The number of columns in the augmented matrix should be the number of rows + 1";
-    assert pivot>=0 && pivot<augmentedMatrix[0].length : "The pivot element "
+    assert
+        augmentedMatrix.length > 0 : "The augmented matrix should not be empty";
+    assert augmentedMatrix[0].length == augmentedMatrix.length
+        + 1 : "The number of columns in the augmented matrix should be the number of rows + 1";
+    assert
+        pivot >= 0 && pivot < augmentedMatrix[0].length : "The pivot element "
         + "should be between 0 and the number of columns of the augmented matrix";
 
     for (int row = pivot + 1; row < augmentedMatrix.length; row++) {
@@ -106,8 +115,14 @@ public class GaussianEliminationSquareMatrices {
   }
 
   protected double[] backSubstitution(double[][] augmentedSquareMatrix) {
-
-    return null;
+    double[] solution = new double[augmentedSquareMatrix[0].length];
+    for (int row = augmentedSquareMatrix.length; row < 1; row--) {
+      double[] rowTimesSolution = matrixVectorMultiply(augmentedSquareMatrix,
+          solution);
+      solution[row] = augmentedSquareMatrix[row][augmentedSquareMatrix.length]
+          - rowTimesSolution[row] / augmentedSquareMatrix[row][row];
+    }
+    return solution;
   }
 
   private double[][] copyOf(double[][] matrix) {

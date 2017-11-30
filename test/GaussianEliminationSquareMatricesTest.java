@@ -1,9 +1,7 @@
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -107,12 +105,16 @@ public class GaussianEliminationSquareMatricesTest {
     assertEquals(2, new GaussianEliminationSquareMatrices()
         .findNextRowWithLargestElementInCol(expectedAugmentedMatrix, pivot));
 
-    new GaussianEliminationSquareMatrices().reduceRow(expectedAugmentedMatrix, pivot);
-    assertEquals(0, expectedAugmentedMatrix[rows - 1][pivot], ALMOST_ZERO_FOR_TESTS);
+    new GaussianEliminationSquareMatrices()
+        .reduceRow(expectedAugmentedMatrix, pivot);
+    assertEquals(0, expectedAugmentedMatrix[rows - 1][pivot],
+        ALMOST_ZERO_FOR_TESTS);
 
     pivot = 1;
-    new GaussianEliminationSquareMatrices().reduceRow(expectedAugmentedMatrix, pivot);
-    assertEquals(0, expectedAugmentedMatrix[rows - 1][pivot], ALMOST_ZERO_FOR_TESTS);
+    new GaussianEliminationSquareMatrices()
+        .reduceRow(expectedAugmentedMatrix, pivot);
+    assertEquals(0, expectedAugmentedMatrix[rows - 1][pivot],
+        ALMOST_ZERO_FOR_TESTS);
   }
 
   /**
@@ -132,12 +134,14 @@ public class GaussianEliminationSquareMatricesTest {
         {4.0, 9.0, 10.0, 4.0}
     };
 
-    final double[][] result = new GaussianEliminationSquareMatrices(ALMOST_ZERO_FOR_TESTS).reducedRowEchelonForm(augmentedMatrix);
+    final double[][] result = new GaussianEliminationSquareMatrices(
+        ALMOST_ZERO_FOR_TESTS).reducedRowEchelonForm(augmentedMatrix);
 
     assertEquals(expectedRowEchelonForm.length, result.length);
 
-    for(int row=0; row<expectedRowEchelonForm.length; row++){
-      assertArrayEquals(expectedRowEchelonForm[row],result[row], ALMOST_ZERO_FOR_TESTS);
+    for (int row = 0; row < expectedRowEchelonForm.length; row++) {
+      assertArrayEquals(expectedRowEchelonForm[row], result[row],
+          ALMOST_ZERO_FOR_TESTS);
     }
   }
 
@@ -155,9 +159,11 @@ public class GaussianEliminationSquareMatricesTest {
     final double[] b = {4, 2, 36};
     final double[] expectedSolution = {-1, 2, 2};
 
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
-    assertEquals(absNorm(expectedSolution, solution), 0., ALMOST_ZERO_FOR_TESTS);
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
   }
 
   @Test
@@ -170,9 +176,11 @@ public class GaussianEliminationSquareMatricesTest {
     double[] b = {4, -2, 9};
     final double[] expectedSolution = {3, -1, -2};
 
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
-    assertEquals(absNorm(expectedSolution, solution), 0., ALMOST_ZERO_FOR_TESTS);
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
   }
 
   @Test
@@ -187,7 +195,8 @@ public class GaussianEliminationSquareMatricesTest {
     };
     double[] b = {4, 4, 9, -6, 5};
 
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
     assertNull(solution); // This system is singular
   }
@@ -203,7 +212,8 @@ public class GaussianEliminationSquareMatricesTest {
     };
     double[] b = {4, 4, 9, -5, 5};
 
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
     assertNull(solution); // This system is singular
   }
@@ -216,7 +226,8 @@ public class GaussianEliminationSquareMatricesTest {
         {-6, 3, -3},
     };
     double[] b = {1, 4, 2};
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
     assertNull(solution); // This system is singular
   }
@@ -229,9 +240,11 @@ public class GaussianEliminationSquareMatricesTest {
     final double[] b = {3};
     final double[] expectedSolution = {3. / 5};
 
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
-    assertEquals(absNorm(expectedSolution, solution), 0., ALMOST_ZERO_FOR_TESTS);
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
   }
 
 
@@ -245,10 +258,13 @@ public class GaussianEliminationSquareMatricesTest {
     final double[] b = {0, 0, 0};
     final double[] expectedSolution = {0, 0, 0};
 
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
-    assertEquals(absNorm(expectedSolution, solution), 0., ALMOST_ZERO_FOR_TESTS);
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
   }
+
   /**
    * test singular
    */
@@ -262,20 +278,26 @@ public class GaussianEliminationSquareMatricesTest {
         {-2, 2, -4},
     };
     double[] b = {-3, 1, 6};
-    final double[] solution = (new GaussianEliminationSquareMatrices()).solve(A, b);
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
 
     assertNull(solution); // This system is singular
   }
 
   @Test
   public void testSingular() {
-    assertNotNull((new GaussianEliminationSquareMatrices().solve(nonSingular, bLength3)));
-    assertNull((new GaussianEliminationSquareMatrices().solve(singular, bLength2)));
-    assertNull((new GaussianEliminationSquareMatrices().solve(bigSingular, bLength4)));
+    assertNotNull(
+        (new GaussianEliminationSquareMatrices().solve(nonSingular, bLength3)));
     assertNull(
-        (new GaussianEliminationSquareMatrices().solve(new double[][]{{0}}, new double[]{1})));
+        (new GaussianEliminationSquareMatrices().solve(singular, bLength2)));
     assertNull(
-        (new GaussianEliminationSquareMatrices().solve(new double[][]{{0, 0}, {1, 2}}, bLength2)));
+        (new GaussianEliminationSquareMatrices().solve(bigSingular, bLength4)));
+    assertNull(
+        (new GaussianEliminationSquareMatrices()
+            .solve(new double[][]{{0}}, new double[]{1})));
+    assertNull(
+        (new GaussianEliminationSquareMatrices()
+            .solve(new double[][]{{0, 0}, {1, 2}}, bLength2)));
   }
 
   /**
@@ -356,7 +378,6 @@ public class GaussianEliminationSquareMatricesTest {
       fail("an assertion should have been violated");
     } catch (AssertionError iae) { /*expected behavior*/ }
   }
-
 
 
   private double absNorm(double[] v1, double[] v2) {
