@@ -8,7 +8,8 @@ import java.util.Arrays;
 import org.junit.Test;
 
 
-/* some of the tests have been adapted from the test suite of Apache Math4 and some from the book
+/* some of the tests have been adapted from the test suite of Apache Math4
+and some from the book
 Algorithms, 4th Edition by Robert Sedgewick and Kevin Waynes
  */
 public class GaussianEliminationSquareMatricesTest {
@@ -32,9 +33,17 @@ public class GaussianEliminationSquareMatricesTest {
       {7.0, 3.0, 256.0, 1930.0},
       {3.0, 7.0, 6.0, 8.0}
   }; // 4th row = 1st + 2nd
+  private double[][] fibSingular = {
+      {0, 1, 1, 2, 3},
+      {5, 8, 13, 21, 34},
+      {55, 89, 144, 233, 377},
+      {610, 987, 1597, 2584, 4181},
+      {6765, 10946, 17711, 28657, 46368}
+  };
   private double[] bLength2 = {1.0, 3.0};
   private double[] bLength3 = {-1.0, 2.0, 5.0};
   private double[] bLength4 = {1.0, 3.0, 0.0, -5.0};
+  private double[] bLength5 = {1.0, 0.5, 4.0, -2.0, -0.5};
 
   @Test
   public void augmentedMatrix() {
@@ -265,12 +274,87 @@ public class GaussianEliminationSquareMatricesTest {
         ALMOST_ZERO_FOR_TESTS);
   }
 
+  @Test
+  public void testSolve9() {
+    final double[][] A = {
+        {1, 0, 0, 0, 0},
+        {0, 1, 0, 0, 0},
+        {0, 0, 1, 0, 0},
+        {0, 0, 0, 1, 0},
+        {0, 0, 0, 0, 1}
+    };
+    final double[] b = {1, 2, 3, 4, 5};
+    final double[] expectedSolution = {1.0, 2.0, 3.0, 4.0, 5.0};
+
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
+
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
+  }
+
+  @Test
+  public void testSolve10() {
+    final double A[][] = {
+        {100, 200, 300},
+        {400, 500, 600},
+        {700, 800, 1000}
+    };
+    final double[] b = {400, 600, 800};
+    final double[] expectedSolution = {-2.6666666666666656,
+        3.3333333333333313, 1.1368683772161587E-15};
+
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
+
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
+  }
+
+  @Test
+  public void testSolve11() throws Exception {
+    final double A[][] = {
+        {0.5, 0, 1, -0.5},
+        {3, 0, 0, 5},
+        {2, 1, 4, -3},
+        {1, 0, 5, 0}
+    };
+    final double[] b = {2, -0.5, 1, 7};
+    final double[] expectedSolution = {0.9166666666666665, -7.650000000000001,
+        1.2166666666666668, -0.6499999999999999};
+
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
+
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
+  }
+
+  @Test
+  public void ExampleUsageSolve() {
+    final double A[][] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 10}
+    };
+    final double[] b = {4, 6, 8};
+    final double[] expectedSolution = {-2.6666666666666665,
+        3.3333333333333317, 8.881784197001258E-16};
+
+    final double[] solution = (new GaussianEliminationSquareMatrices())
+        .solve(A, b);
+
+    assertEquals(absNorm(expectedSolution, solution), 0.,
+        ALMOST_ZERO_FOR_TESTS);
+  }
+
   /**
    * test singular
    */
   @Test
   public void testSolveSingular() {
-    GaussianEliminationSquareMatrices solver = new GaussianEliminationSquareMatrices();
+    GaussianEliminationSquareMatrices solver = new
+        GaussianEliminationSquareMatrices();
 
     double[][] A = {
         {1, -1, 2},
@@ -300,6 +384,13 @@ public class GaussianEliminationSquareMatricesTest {
             .solve(new double[][]{{0, 0}, {1, 2}}, bLength2)));
   }
 
+  @Test
+  public void testFibSingular() {
+    assertNull(
+        (new GaussianEliminationSquareMatrices().solve(fibSingular,bLength5)));
+  } // I was curious as to whether a 5x5 matrix of fibonacci numbers was
+  // singular or not so added it as a test.
+
   /**
    * test threshold impact
    */
@@ -313,8 +404,10 @@ public class GaussianEliminationSquareMatricesTest {
 
     final double[] b = new double[]{0.0, 1.0, 4.0};
 
-    assertNull((new GaussianEliminationSquareMatrices(1.0e-5)).solve(A, b));
-    assertNotNull((new GaussianEliminationSquareMatrices(1.0e-10)).solve(A, b));
+    assertNull((new
+        GaussianEliminationSquareMatrices(1.0e-5)).solve(A, b));
+    assertNotNull((new
+        GaussianEliminationSquareMatrices(1.0e-10)).solve(A, b));
   }
 
 
@@ -323,7 +416,8 @@ public class GaussianEliminationSquareMatricesTest {
    */
   @Test
   public void testSolveDimensionErrors() {
-    GaussianEliminationSquareMatrices solver = new GaussianEliminationSquareMatrices();
+    GaussianEliminationSquareMatrices solver = new
+        GaussianEliminationSquareMatrices();
     try {
       solver.solve(nonSingular, new double[5]);
       fail("an assertion should have been violated");

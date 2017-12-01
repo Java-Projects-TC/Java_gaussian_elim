@@ -12,15 +12,15 @@ public class ExampleUsage {
 
     final double acceptableTolerance = Math.pow(10, -5);
 
-    GaussianEliminationSquareMatrices solver = new GaussianEliminationSquareMatrices(
-        acceptableTolerance);
+    GaussianEliminationSquareMatrices solver = new
+        GaussianEliminationSquareMatrices(acceptableTolerance);
 
     final double[] solution = solver.solve(A, b);
-    System.out.println("The solution is: "+Arrays.toString(solution));
+    System.out.println("The solution is: " + Arrays.toString(solution));
 
-    if(solution==null){
+    if (solution == null) {
       System.out.println("Matrix A should be singular");
-    }else {
+    } else {
       if (solver.checkSolution(A, b, solution)) {
         System.out.println("Solution correct");
       } else {
